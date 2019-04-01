@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var dbconfig   = require('../../dbconfig/userdb');
+var dbconfig   = require('../../dbconfig/albachaindb');
 var mysql      = require('mysql');
 var connection = mysql.createConnection(dbconfig);
 var bcrypt = require('bcrypt');
@@ -9,7 +9,7 @@ var mysql      = require('mysql');
 
 var fn = {};
 fn.userinfo =  function (req, res, next) {
-  var sql = 'SELECT * FROM user_data' ;
+  var sql = 'SELECT * FROM userinfo' ;
 
   connection.query(sql,function(err, result) {
     if(!err){
@@ -23,8 +23,8 @@ fn.userinfo =  function (req, res, next) {
 
 
 fn.signup = function (req, res, next) {
-  var sql_insert = 'INSERT INTO user_data (id, password, name) VALUES(?,?,?)';
-  var sql_check = 'SELECT * FROM user_data WHERE `id`= ? '
+  var sql_insert = 'INSERT INTO userinfo (id, password, name, gender, birth, phonenumber) VALUES(?,?,?,?,?,?)';
+  var sql_check = 'SELECT * FROM userinfo WHERE `id`= ? '
   const saltRounds = 5;
 
   var

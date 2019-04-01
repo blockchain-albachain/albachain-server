@@ -2,7 +2,7 @@ var session = require('express-session');
 var passport = require('passport');
 var express = require('express');
 var router = express.Router();
-var dbconfig   = require('../../dbconfig/userdb');
+var dbconfig   = require('../../dbconfig/albachaindb');
 var mysql      = require('mysql');
 var connection = mysql.createConnection(dbconfig);
 var bcrypt = require('bcrypt');
@@ -16,7 +16,7 @@ module.exports = () => {
   });
 
   passport.deserializeUser((id, done) => { // 매개변수 id는 req.session.passport.user에 저장된 값
-    connection.query("select * from user_data where id = ? ", id, function (err, rows){
+    connection.query("select * from userinfo where id = ? ", id, function (err, rows){
 
        done(err, rows[0]);
 
@@ -37,7 +37,7 @@ passport.use('local', new LocalStrategy({
 
       if(!userid || !password ) { return done(null, false, req.flash('message','All fields are required.')); }
 
-      connection.query("select * from user_data where id = ?", [userid], function(err, rows){
+      connection.query("select * from userinfo where id = ?", [userid], function(err, rows){
 
       //  console.log(rows);
 
