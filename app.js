@@ -18,6 +18,7 @@ var bcrypt = require('bcrypt');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var musersRouter = require('./routes/musers');
 var tempRouter = require('./routes/temp');
 
 var app = express();
@@ -51,6 +52,7 @@ app.set("json spaces", 4);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/musers', musersRouter);
 app.use('/temp', tempRouter);
 
 // catch 404 and forward to error handler
