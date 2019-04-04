@@ -7,6 +7,8 @@ var flash = require('connect-flash');
 var session = require('express-session'); //세션연결
 var passport = require('passport');
 var passportConfig = require('./function/funUsers/passport');
+var mpassportConfig = require('./function/funUsers/Mpassport');
+
 var bodyParser = require("body-parser");
 var mysql      = require('mysql');
 
@@ -19,7 +21,6 @@ var bcrypt = require('bcrypt');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var musersRouter = require('./routes/musers');
-var tempRouter = require('./routes/temp');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use(flash());
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
 passportConfig();
+mpassportConfig();
 
 // Parse application/json inputs.
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -53,7 +55,6 @@ app.set("json spaces", 4);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/musers', musersRouter);
-app.use('/temp', tempRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
