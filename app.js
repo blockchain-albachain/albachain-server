@@ -14,8 +14,13 @@ var mysql      = require('mysql');
 
 
 var router = express.Router();
-var dbconfig   = require('./dbconfig/albachaindb');
-var connection = mysql.createConnection(dbconfig);
+var dbconfig   = require('./dbconfig/albachaindb')();
+// var connection = mysql.createConnection(dbconfig);
+var connection = dbconfig.init();
+dbconfig.start_db(connection);
+connection.on('error', function() {})
+
+
 var bcrypt = require('bcrypt');
 
 var indexRouter = require('./routes/index');

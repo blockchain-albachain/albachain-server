@@ -16,6 +16,7 @@ router.get('/allInfo', function(req, res, next) {
 
 // sign up
 router.post('/signup', function(req,res,next){
+  console.log("signup");
   infor.signup(req,res,next);
 });
 

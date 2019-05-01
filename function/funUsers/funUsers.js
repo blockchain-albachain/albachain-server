@@ -23,17 +23,24 @@ fn.userinfo =  function (req, res, next) {
 
 
 fn.signup = function (req, res, next) {
+  console.log("signup function start");
   var sql_insert = 'INSERT INTO userinfo (id, password, name, gender, birth, phonenumber) VALUES(?,?,?,?,?,?)';
   var sql_check = 'SELECT * FROM userinfo WHERE `id`= ? '
   const saltRounds = 5;
 
-  var
-   new_id = req.body.newid,
-   new_pw_hash = bcrypt.hashSync(req.body.newpw, saltRounds),
-   params = [new_id, new_pw_hash , req.body.newname ,req.body.newage, req.body.newsex];
+  console.log("signup function check1");
+  console.log(req.body);
 
+  var
+   new_id = req.body.id,
+   new_pw_hash = bcrypt.hashSync(req.body.password, saltRounds),
+   params = [new_id, new_pw_hash , req.body.name ,req.body.gender, req.body.birth, req.body.phonenumber];
+
+   console.log("signup function check2");
 
    connection.query(sql_check, new_id, function (err, result) {
+     console.log("signup function connection id_check");
+
      if (err) {
          console.log('err :' + err);
          return res.json({success: false, msg: err});

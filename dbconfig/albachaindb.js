@@ -1,9 +1,27 @@
 var mysql = require('mysql');
+var config = require('./db_info').local;
 
-module.exports={
-  host     : 'localhost',
-  user     : 'alba',
-  password : '1111',
-  port     : 3306,
-  database : 'albachain'
+module.exports= function() {
+  return {
+    init: function () {
+      return mysql.createConnection({
+        host: config.host,
+        port: config.port,
+        user: config.user,
+        password: config.password,
+        database: config.database})
+    },
+    start_db: function (con) {
+      con.connect(function (err) {
+        if(err) {
+          console.error('Database connection error : ' + err);
+        } else{
+          console.info('Database is connected successfully.');
+        }
+
+      })
+
+    }
+  }
+
 };

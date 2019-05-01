@@ -28,9 +28,9 @@ fn.signup = function (req, res, next) {
   const saltRounds = 5;
 
   var
-   new_id = req.body.newid,
-   new_pw_hash = bcrypt.hashSync(req.body.newpw, saltRounds),
-   params = [new_id, new_pw_hash , req.body.newname ,req.body.newage, req.body.newsex];
+   new_id = req.body.id,
+   new_pw_hash = bcrypt.hashSync(req.body.password, saltRounds),
+   params = [new_id, new_pw_hash , req.body.name ,req.body.gender, req.body.birth, req.body.phonenumber, req.body.business_number];
 
 
    connection.query(sql_check, new_id, function (err, result) {
