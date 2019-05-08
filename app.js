@@ -3,31 +3,41 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var flash = require('connect-flash');
-var session = require('express-session'); //세션연결
-var passport = require('passport');
 var passportConfig = require('./function/funUsers/passport');
+const flash = require('connect-flash');
+const passport = require('passport');
+//        , LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session'); //세션연결
 var mpassportConfig = require('./function/funUsers/Mpassport');
-
-var bodyParser = require("body-parser");
-var mysql      = require('mysql');
-
-
-var router = express.Router();
-var dbconfig   = require('./dbconfig/albachaindb')();
-// var connection = mysql.createConnection(dbconfig);
-var connection = dbconfig.init();
-dbconfig.start_db(connection);
-connection.on('error', function() {})
-
-
-var bcrypt = require('bcrypt');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var musersRouter = require('./routes/musers');
 
+// DB connection
+var dbconfig = require('./dbconfig/albachaindb')();
+var connection = dbconfig.init();
+dbconfig.start_db(connection);
+connection.on('error', function() {})
+
+
 var app = express();
+
+/* session middleware */
+app.use(session({
+  cookie: { maxAge: 1000 * 60 * 60 // 1h
+    , httpOnly: true
+  },
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(flash());
+app.use(passport.initialize()); // passport 구동
+app.use(passport.session()); // 세션 연결
+passportConfig();
+mpassportConfig();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,22 +49,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* session middleware */
-app.use(session({ cookie: { maxAge: 60000 },
-                  secret: 'keyboard cat',
-                  resave: false,
-                  saveUninitialized: true}));
 
-app.use(flash());
-app.use(passport.initialize()); // passport 구동
-app.use(passport.session()); // 세션 연결
-passportConfig();
-mpassportConfig();
+
+// var bodyParser = require("body-parser");
+// var mysql = require('mysql');
+// var router = express.Router();
+// var bcrypt = require('bcrypt');
 
 // Parse application/json inputs.
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json());
-app.set("json spaces", 4);
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json());
+// app.set("json spaces", 4);
 
 
 app.use('/', indexRouter);

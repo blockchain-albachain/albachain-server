@@ -1,18 +1,22 @@
-var express = require('express');
-var router = express.Router();
-var dbconfig   = require('../../dbconfig/albachaindb');
-var mysql      = require('mysql');
-var connection = mysql.createConnection(dbconfig);
+// var express = require('express');
+// var router = express.Router();
+var dbconfig = require('../../dbconfig/albachaindb')();
+var connection = dbconfig.init();
+// var mysql      = require('mysql');
+// var connection = mysql.createConnection(dbconfig);
 var bcrypt = require('bcrypt');
-var mysql      = require('mysql');
 
+const session = require('express-session');
+// const FileStore = require('session-file-store')(session);
 
 var fn = {};
-fn.userinfo =  function (req, res, next) {
-  var sql = 'SELECT * FROM userinfo' ;
 
-  connection.query(sql,function(err, result) {
+fn.userinfo =  function (req, res, next) {
+  var sql = 'SELECT * FROM userinfo WHERE id = ?' ;
+
+  connection.query(sql,req.params.id,function(err, result) {
     if(!err){
+      console.log('result value = ' + result);
       res.send(result);
     } else {
       console.log('Error');
@@ -24,7 +28,7 @@ fn.userinfo =  function (req, res, next) {
 
 fn.signup = function (req, res, next) {
   console.log("signup function start");
-  var sql_insert = 'INSERT INTO userinfo (id, password, name, gender, birth, phonenumber) VALUES(?,?,?,?,?,?)';
+  var sql_insert = 'INSERT INTO userinfo (id, password, name, gender, birth, phone_number) VALUES(?,?,?,?,?,?)';
   var sql_check = 'SELECT * FROM userinfo WHERE `id`= ? '
   const saltRounds = 5;
 
@@ -34,7 +38,7 @@ fn.signup = function (req, res, next) {
   var
    new_id = req.body.id,
    new_pw_hash = bcrypt.hashSync(req.body.password, saltRounds),
-   params = [new_id, new_pw_hash , req.body.name ,req.body.gender, req.body.birth, req.body.phonenumber];
+   params = [new_id, new_pw_hash , req.body.name ,req.body.gender, req.body.birth, req.body.phone_number];
 
    console.log("signup function check2");
 
@@ -66,35 +70,4 @@ fn.signup = function (req, res, next) {
   });
 }
 
-/* login - passport 적용 전 코드*/
-// fn.signin = function (req, res, next) {
-//   var sql_select = 'SELECT * FROM `customer_info` WHERE `id`= ? ' ;
-//
-//   var
-//     user_id = req.body.userid,
-//     password = req.body.password;
-//
-//   connection.query(sql_select, user_id, function(err, result) {
-//     console.log(result);
-//     if (err) {
-//       console.log('err :' + err);
-//       res.send('에러!');
-//     }else {
-//       if (result.length === 0) {
-//         res.json({success: false, msg: '해당 유저가 존재하지 않습니다.'})
-//         console.log('아이디 오류!' );
-//       } else {
-//         if(!bcrypt.compareSync(password, result[0].pw)) {
-//           console.log('비밀번호 오류');
-//           return done(false, null)
-//           res.json({success: false, msg: '비밀번호가 일치하지 않습니다.'})
-//         } else {
-//           console.log('success login');
-//           // res.json({success: true})
-//           res.send('true');
-//         }
-//       }
-//     }
-//   });
-// }
 module.exports = fn;
