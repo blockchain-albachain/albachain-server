@@ -5,10 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var passportConfig = require('./function/funUsers/passport');
 const flash = require('connect-flash');
-const passport = require('passport');
-//        , LocalStrategy = require('passport-local').Strategy;
-var session = require('express-session'); //세션연결
+const passport = require('passport')
+        , LocalStrategy = require('passport-local').Strategy;
+// var session = require('express-session'); //세션연결
 var mpassportConfig = require('./function/funUsers/Mpassport');
+var cookieSession = require('cookie-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -24,7 +25,7 @@ connection.on('error', function() {})
 var app = express();
 
 /* session middleware */
-app.use(session({
+app.use(cookieSession({
   cookie: { maxAge: 1000 * 60 * 60 // 1h
     , httpOnly: true
   },
@@ -49,7 +50,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// device server 접속 허용
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 // var bodyParser = require("body-parser");
 // var mysql = require('mysql');

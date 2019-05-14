@@ -19,7 +19,9 @@ router.post('/signup', function(req,res,next){
 });
 
 // sign in
-router.post('/signin', passport.authenticate('local-signin'),function(req, res){
+router.post('/signin', passport.authenticate('localsignin',{
+  failureRedirect: '/users/signin_f', failureFlash: true
+}),function(req, res){
   console.log('ID : '+ req.body.username);
   console.log('******* signin *******');
   res.json({success: true, msg: 'signin success'});
