@@ -1,18 +1,20 @@
-var session = require('express-session');
+// var session = require('express-session');
 var passport = require('passport');
-var express = require('express');
-var router = express.Router();
-var dbconfig   = require('../../dbconfig/albachaindb');
-var mysql      = require('mysql');
-var connection = mysql.createConnection(dbconfig);
+// var express = require('express');
+// var router = express.Router();
+var dbconfig   = require('../../dbconfig/albachaindb')();
+var connection = dbconfig.init();
+// var mysql      = require('mysql');
+// var connection = mysql.createConnection(dbconfig);
 var bcrypt = require('bcrypt');
-var flash = require('connect-flash');
+// var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = () => {
   /* 사용자 정보 세션 저장 */
   passport.serializeUser((user, done) => { // Strategy 성공 시 호출됨
-    done(null, user.id); // 여기의 user가 deserializeUser의 첫 번째 매개변수로 이동
+    console.log("fdsfd");
+    done(null, user); // 여기의 user가 deserializeUser의 첫 번째 매개변수로 이동
   });
 
   passport.deserializeUser((id, done) => { // 매개변수 id는 req.session.passport.user에 저장된 값
@@ -23,10 +25,9 @@ module.exports = () => {
    });
   });
 
-passport.use('local', new LocalStrategy({
+passport.use('local-signin', new LocalStrategy({
 
   useridField: 'userid',
-
   passwordField: 'password',
 
   session: true,
@@ -35,11 +36,13 @@ passport.use('local', new LocalStrategy({
 
 } , function (req, userid, password, done){
 
+      console.log(req);
+
       if(!userid || !password ) { return done(null, false, req.flash('message','All fields are required.')); }
 
       connection.query("select * from userinfo where id = ?", [userid], function(err, rows){
 
-      //  console.log(rows);
+       console.log(rows);
 
         if (err) return done(req.flash('message',err));
 
@@ -48,7 +51,7 @@ passport.use('local', new LocalStrategy({
           return done(null, false, req.flash('message','Invalid userid.'));
         }
 
-        if(!bcrypt.compareSync(password, rows[0].pw)){
+        if(!bcrypt.compareSync(password, rows[0].password)){
             console.log('*******  Invalid password.');
             return done(null, false, req.flash('message','Invalid password.'));
           }

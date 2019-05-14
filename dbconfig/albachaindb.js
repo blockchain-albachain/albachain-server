@@ -9,7 +9,9 @@ module.exports= function() {
         port: config.port,
         user: config.user,
         password: config.password,
-        database: config.database})
+        database: config.database,
+        timeout: config.timeout
+      })
     },
     start_db: function (con) {
       con.connect(function (err) {

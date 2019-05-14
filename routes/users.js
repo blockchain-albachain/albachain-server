@@ -19,16 +19,15 @@ router.post('/signup', function(req,res,next){
 });
 
 // sign in
-router.post('/signin', passport.authenticate('local-signin',{
-  failureRedirect: '/users/signin', failureFlash: true}
-),function(req, res){
+router.post('/signin', passport.authenticate('local-signin'),function(req, res){
   console.log('ID : '+ req.body.username);
   console.log('******* signin *******');
   res.json({success: true, msg: 'signin success'});
 });
 
 // 로그인 false 시 값 보내주는곳
-router.get('/signin', function (req,res) {
+router.get('/signin_f', function (req,res){
+  console.log('signin false');
   res.json({success: false, msg: 'signin false'});
 });
 

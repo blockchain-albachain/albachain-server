@@ -14,7 +14,8 @@ module.exports = (function () {
         port: '3306',
         user: 'alba',
         password: '1q2w3e4r',
-        database: 'albachain'
+        database: 'albachain',
+        timeout : 60000
       }
     }
   })();

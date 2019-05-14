@@ -37,7 +37,7 @@ app.use(flash());
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
 passportConfig();
-mpassportConfig();
+// mpassportConfig();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
