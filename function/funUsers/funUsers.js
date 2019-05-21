@@ -42,6 +42,8 @@ fn.signup = function (req, res, next) {
 
    console.log("signup function check2");
 
+
+   //아이디 중복 체크
    connection.query(sql_check, new_id, function (err, result) {
      console.log("signup function connection id_check");
 
@@ -56,6 +58,8 @@ fn.signup = function (req, res, next) {
        }
        console.log('id check - pass');
 
+
+    // 아이디 생성
     connection.query(sql_insert,params, function (err, result) {
       // console.log(new_pw_hash);
      if(err){

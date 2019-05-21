@@ -7,13 +7,14 @@ var connection = dbconfig.init();
 // var mysql      = require('mysql');
 // var connection = mysql.createConnection(dbconfig);
 var bcrypt = require('bcrypt');
-// var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
+
 
 module.exports = () => {
   /* 사용자 정보 세션 저장 */
   passport.serializeUser((user, done) => { // Strategy 성공 시 호출됨
-    console.log("fdsfd");
+    console.log("serializeUser");
     done(null, user); // 여기의 user가 deserializeUser의 첫 번째 매개변수로 이동
   });
 
@@ -36,7 +37,10 @@ passport.use('localsignin', new LocalStrategy({
 
 } , function (req, userid, password, done){
 
-      console.log(req);
+      // console.log(req);
+      console.log(userid);
+      console.log(password);
+      console.log(done);
 
       if(!userid || !password ) { return done(null, false, req.flash('message','All fields are required.')); }
 

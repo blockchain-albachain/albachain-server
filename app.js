@@ -14,6 +14,7 @@ var cookieSession = require('cookie-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var musersRouter = require('./routes/musers');
+// var mregistrationRouter = require('./routes/mregistration');
 
 // DB connection
 var dbconfig = require('./dbconfig/albachaindb')();
@@ -38,7 +39,7 @@ app.use(flash());
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
 passportConfig();
-// mpassportConfig();
+mpassportConfig();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -71,6 +72,7 @@ app.all('/*', function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/musers', musersRouter);
+// app.use('/mregistration', mregistrationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
