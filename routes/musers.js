@@ -13,12 +13,12 @@ router.get('/allInfo', function(req, res, next) {
 });
 
 // sign up
-router.post('/m_signup', function(req,res,next){
+router.post('/Msignup', function(req,res,next){
   console.log("M_signup");
   funMUsers.signup(req,res,next);
 });
 
-router.post('/m_signin', passport.authenticate('m_localsignin',{
+router.post('/Msignin', passport.authenticate('m_localsignin',{
   failureRedirect: '/musers/signin_f', failureFlash: true}
 ),function(req, res){
   console.log('ID : '+ req.body.username);
@@ -26,20 +26,20 @@ router.post('/m_signin', passport.authenticate('m_localsignin',{
   res.json({success: true, msg: 'Signin success'});
 });
 // 로그인 false 시 값 보내주는곳
-router.get('/m_signin_f', function (req,res) {
+router.get('/Msignin_f', function (req,res) {
   console.log('signin false');
   res.json({success: false, msg: 'Signin false'});
 });
 
 // User signout
-router.get('/m_signout', function (req,res){
+router.get('/Msignout', function (req,res){
   req.logout();
   res.json({success: true, msg: 'signout success'});
 });
 
 
 // delete
-router.delete('/m_delete', function(req, res, next) {
+router.delete('/Mdelete', function(req, res, next) {
 res.json({success: false, msg: '아직 구현하지 않음.'});
 });
 

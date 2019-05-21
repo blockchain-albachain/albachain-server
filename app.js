@@ -14,7 +14,7 @@ var cookieSession = require('cookie-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var musersRouter = require('./routes/musers');
-// var mregistrationRouter = require('./routes/mregistration');
+var mregistrationRouter = require('./routes/mregistration');
 
 // DB connection
 var dbconfig = require('./dbconfig/albachaindb')();
@@ -72,7 +72,7 @@ app.all('/*', function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/musers', musersRouter);
-// app.use('/mregistration', mregistrationRouter);
+app.use('/mregistration', mregistrationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
