@@ -32,6 +32,7 @@ fn.signup = function (req, res, next) {
   // var sql_check = 'SELECT * FROM m_userinfo WHERE `id`= ? or `business_number` = ?'
   var sql_check = 'SELECT * FROM m_userinfo WHERE `id`= ? '
   var bnum_check = 'SELECT * FROM m_userinfo WHERE `business_number` = ? '
+  var bnum_check2 = 'SELECT * FROM store WHERE `business_number` = ? '
   const saltRounds = 5;
 
   console.log("m_signup function check1");
@@ -45,20 +46,8 @@ fn.signup = function (req, res, next) {
 
    console.log("m_signup function check2");
 
+
    // 아이디 중복 체크
-   // connection.query(sql_check, [new_id,bnum], function (err, result) {
-   //   console.log("m_signup function connection id_check");
-   //   console.log(result);
-   //   if (err) {
-   //       console.log('err :' + err);
-   //       return res.json({success: false, msg: err});
-   //     }else {
-   //       if (result.length != 0) {
-   //         console.log('아이디 중복!' );
-   //         return res.json({success: false, msg: '아이디 중복입니다.'});
-   //       }
-   //     }
-   //     console.log('id check - pass');
    connection.query(sql_check, new_id, function (err, result) {
      console.log("m_signup function connection id_check");
      console.log(result);
@@ -72,8 +61,25 @@ fn.signup = function (req, res, next) {
          }
        }
        console.log('id check - pass');
-    // 사업자 번호 중복 체크
 
+
+    // store테이블에서 등록된 사업자 번호 체크
+    connection.query(bnum_check2, bnum, function(err, result){
+      console.log("m_signup function connection business_number_check2");
+      console.log(result);
+      if (err) {
+          console.log('err :' + err);
+          return res.json({success: false, msg: err});
+        }else {
+          if (result.length == 0) {
+            console.log('등록되지 않은 사업자번호!' );
+            return res.json({success: false, msg: '등록되지 않은 사업자번호입니다.'});
+          }
+        }
+        console.log('business_number check - pass');
+
+
+    // 사업자 번호 중복 체크
     connection.query(bnum_check, bnum, function(err, result){
       console.log("m_signup function connection business_number_check");
       console.log(result);
@@ -88,9 +94,6 @@ fn.signup = function (req, res, next) {
         }
         console.log('business_number check - pass');
 
-
-
-
     // 아이디 생성
     connection.query(sql_insert,params, function (err, result) {
       // console.log(new_pw_hash);
@@ -104,6 +107,7 @@ fn.signup = function (req, res, next) {
       }
     });
 
+    });
     });
   });
 }
