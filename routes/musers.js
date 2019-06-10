@@ -18,7 +18,7 @@ router.post('/Msignup', function(req,res,next){
   funMUsers.signup(req,res,next);
 });
 
-router.post('/Msignin', passport.authenticate('m_localsignin',{
+router.post('/Msignin', passport.authenticate('Mlocalsignin',{
   failureRedirect: '/musers/signin_f', failureFlash: true}
 ),function(req, res){
   console.log('ID : '+ req.body.username);

@@ -26,7 +26,7 @@ module.exports = () => {
    });
   });
 
-passport.use('m_localsignin', new LocalStrategy({
+passport.use('Mlocalsignin', new LocalStrategy({
 
   useridField: 'userid',
   passwordField: 'password',

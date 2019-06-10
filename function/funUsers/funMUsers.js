@@ -20,7 +20,7 @@ fn.userinfo =  function (req, res, next) {
       res.send(result);
     } else {
       console.log('Error');
-      res.render('index', {title:'Error'});
+      res.json({success: false, msg: 'err!'});
     }
   });
 }

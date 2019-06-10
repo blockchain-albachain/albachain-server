@@ -15,6 +15,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var musersRouter = require('./routes/musers');
 var mregistrationRouter = require('./routes/mregistration');
+var contractRouter = require('./routes/contract');
+var smartContractRouter = require('./routes/smartContract');
+
 
 // DB connection
 var dbconfig = require('./dbconfig/albachaindb')();
@@ -73,6 +76,143 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/musers', musersRouter);
 app.use('/mregistration', mregistrationRouter);
+app.use('/contract', contractRouter);
+app.use('/smartContract', smartContractRouter);
+
+
+// smartContract 부분
+var Web3 = require('web3');
+
+///
+var contractAddress = '0x9121142019ffe11e66d455216038586af5eb4aae';
+var abi = [
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "deposit",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_receivedUserAddress",
+				"type": "address"
+			}
+		],
+		"name": "setReceivedUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_sendUserAddress",
+				"type": "address"
+			}
+		],
+		"name": "setSendUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getReceivedMoney",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getReceivedUser",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getSendUser",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "receivedUserAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "sendUserAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+// global.addEventListener('load', function() {
+  // web3 = new Web3(web3.currentProvider);
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+// });
+simpleStorageContract = web3.eth.contract(abi);
+simpleStorage = simpleStorageContract.at(contractAddress);
+web3.eth.defaultAccount = web3.eth.accounts[0]; // 기본 주소(defaultAccount)를 정해줘야 한다.
+///
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

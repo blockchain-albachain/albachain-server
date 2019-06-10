@@ -15,7 +15,7 @@ router.post('/Mstoreup', function(req,res,next){
 
 // store push
 router.get('/Mstorepush', function(req,res,next){
-  console.log("M_storeup");
+  console.log("M_storePush");
   fnregistration.storepush(req,res,next);
 });
 

@@ -13,7 +13,7 @@ fn.storepush =  function (req, res, next) {
         res.send(data);
       } else {
         console.log('Error');
-        res.render('index', {title:'Error'});
+        res.json({success: false, msg: 'err!'});
       }
   });
 }
