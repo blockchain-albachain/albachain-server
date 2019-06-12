@@ -19,11 +19,9 @@ module.exports = () => {
   });
 
   passport.deserializeUser((id, done) => { // 매개변수 id는 req.session.passport.user에 저장된 값
-    connection.query("select * from m_userinfo where id = ? ", id, function (err, rows){
 
-       done(err, rows[0]);
+       done(err, id);
 
-   });
   });
 
 passport.use('Mlocalsignin', new LocalStrategy({

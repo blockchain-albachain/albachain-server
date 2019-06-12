@@ -11,6 +11,7 @@ fn.storepush =  function (req, res, next) {
   connection.query(sql, function(err, data) {
       if(!err){
         res.send(data);
+        // res.json({success: true, result: data});
       } else {
         console.log('Error');
         res.json({success: false, msg: 'err!'});
